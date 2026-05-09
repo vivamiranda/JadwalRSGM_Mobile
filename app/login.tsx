@@ -1,3 +1,4 @@
+import { router } from "expo-router";
 import { useState } from "react";
 import {
     SafeAreaView,
@@ -36,8 +37,15 @@ export default function LoginScreen() {
       alert("Username, password, atau posisi salah!");
       return;
     }
-
-    alert("Login berhasil! Selamat datang, " + data.nama_lengkap);
+    if (data.role === "Perawat") {
+      router.replace("/perawat-dashboard");
+    } else if (data.role === "Admin") {
+      router.replace("/admin-dashboard");
+    } else if (data.role === "Kepegawaian") {
+      router.replace("/kepegawaian-dashboard");
+    } else if (data.role === "Direktur") {
+      router.replace("/direktur-dashboard");
+    }
   };
 
   return (
