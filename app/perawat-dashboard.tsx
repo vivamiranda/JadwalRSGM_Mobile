@@ -1,3 +1,5 @@
+import { router } from 'expo-router';
+import PopupPengajuan from './popup-pengajuan';
 import { useEffect, useState } from 'react';
 import {
   View, Text, StyleSheet, FlatList,
@@ -21,6 +23,8 @@ export default function PerawatDashboard() {
   const [selectedDate, setSelectedDate] = useState(new Date());
   const [modeKalender, setModeKalender] = useState<'hari' | 'minggu'>('hari');
   const namaLogin = 'mirau';
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [jadwalDipilih, setJadwalDipilih] = useState<any>(null);
 
   useEffect(() => {
     fetchJadwal();
@@ -153,7 +157,13 @@ export default function PerawatDashboard() {
                 </View>
               </View>
               {item.nama_perawat === namaLogin && (
-                <TouchableOpacity style={styles.ajukanBtn}>
+                <TouchableOpacity
+                  style={styles.ajukanBtn}
+                  onPress={() => {
+                    setJadwalDipilih(item);
+                    setPopupVisible(true);
+                  }}
+                >
                   <Text style={styles.ajukanText}>Ajukan Perubahan</Text>
                 </TouchableOpacity>
               )}
@@ -168,7 +178,7 @@ export default function PerawatDashboard() {
           <Ionicons name="calendar" size={26} color="#0d9488" />
           <Text style={styles.navLabel}>Jadwal</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.navItem}>
+        <TouchableOpacity style={styles.navItem} onPress={() => router.push('/perawat-riwayat')}>
           <Ionicons name="document-text-outline" size={26} color="#999" />
           <Text style={styles.navLabelInactive}>Riwayat</Text>
         </TouchableOpacity>
@@ -177,6 +187,13 @@ export default function PerawatDashboard() {
           <Text style={styles.navLabelInactive}>Profil</Text>
         </TouchableOpacity>
       </View>
+      {jadwalDipilih && (
+        <PopupPengajuan
+          visible={popupVisible}
+          onClose={() => setPopupVisible(false)}
+          jadwal={jadwalDipilih}
+        />
+      )}
     </SafeAreaView>
   );
 }
