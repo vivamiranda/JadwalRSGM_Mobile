@@ -18,6 +18,9 @@ export default function RootLayout() {
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="modal" options={{ presentation: 'modal', title: 'Modal' }} />
         <Stack.Screen name="perawat-riwayat" options={{ headerShown: false }} />
+        <Stack.Screen name="perawat-profil" options={{ headerShown: false }} />
+        <Stack.Screen name="perawat-request" options={{ headerShown: false }} />
+        <Stack.Screen name="perawat-dashboard" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>
