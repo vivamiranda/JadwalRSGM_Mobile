@@ -16,7 +16,23 @@ export default function PerawatRiwayat() {
     "perubahan",
   );
   const [pengajuan, setPengajuan] = useState<any[]>([]);
+  const [requestJadwal, setRequestJadwal] = useState<any[]>([]);
   const namaLogin = "perawat1";
+
+  useEffect(() => {
+    fetchPengajuan();
+    fetchRequestJadwal();
+  }, []);
+
+  const fetchRequestJadwal = async () => {
+    const { data, error } = await supabase
+      .from("request_jadwal")
+      .select("*")
+      .eq("nama_perawat", namaLogin)
+      .order("created_at", { ascending: false });
+
+    if (!error && data) setRequestJadwal(data);
+  };
 
   useEffect(() => {
     fetchPengajuan();
@@ -258,10 +274,95 @@ export default function PerawatRiwayat() {
           }
         />
       ) : (
-        <View style={styles.empty}>
-          <Ionicons name="calendar-outline" size={48} color="#ccc" />
-          <Text style={styles.emptyTxt}>Belum ada request jadwal</Text>
-        </View>
+        <FlatList
+          data={requestJadwal}
+          keyExtractor={(item) => item.id.toString()}
+          contentContainerStyle={{ padding: 16, paddingBottom: 100 }}
+          renderItem={({ item }) => (
+            <View style={styles.card}>
+              <View style={styles.cardHeader}>
+                <Text style={styles.cardTitle}>
+                  {new Date(item.tanggal).toLocaleDateString("id-ID", {
+                    weekday: "long",
+                    day: "numeric",
+                    month: "long",
+                    year: "numeric",
+                  })}
+                </Text>
+                <View
+                  style={[
+                    styles.statusBadge,
+                    { backgroundColor: getStatusBg(item.status) },
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.statusTxt,
+                      { color: getStatusColor(item.status) },
+                    ]}
+                  >
+                    {item.status}
+                  </Text>
+                </View>
+              </View>
+              <View style={styles.divider} />
+              <View style={styles.infoRow}>
+                <Ionicons name="time-outline" size={14} color="#666" />
+                <Text style={styles.infoTxt}>
+                  {item.shift} - {item.poli} |{" "}
+                  {item.shift === "AP" || item.shift === "S1"
+                    ? "07.00 - 14.00"
+                    : item.shift === "S"
+                      ? "14.00 - 21.00"
+                      : "21.00 - 07.00"}
+                </Text>
+              </View>
+              <View style={styles.approvalRow}>
+                <View style={styles.approvalBox}>
+                  <Text style={styles.approvalTitle}>Kepala Perawat</Text>
+                  <View style={styles.approvalStatus}>
+                    <View
+                      style={[
+                        styles.dot,
+                        {
+                          backgroundColor: getStatusColor(
+                            item.status_admin === "Disetujui"
+                              ? "Disetujui"
+                              : item.status_admin === "Ditolak"
+                                ? "Ditolak"
+                                : "Menunggu",
+                          ),
+                        },
+                      ]}
+                    />
+                    <Text
+                      style={[
+                        styles.approvalTxt,
+                        {
+                          color: getStatusColor(
+                            item.status_admin === "Disetujui"
+                              ? "Disetujui"
+                              : item.status_admin === "Ditolak"
+                                ? "Ditolak"
+                                : "Menunggu",
+                          ),
+                        },
+                      ]}
+                    >
+                      {item.status_admin}
+                    </Text>
+                  </View>
+                </View>
+              </View>
+            </View>
+          )}
+          ListEmptyComponent={
+            <View style={styles.empty}>
+              <Ionicons name="calendar-outline" size={48} color="#ccc" />
+              <Text style={styles.emptyTxt}>Belum ada request jadwal</Text>
+            </View>
+          }
+        />
       )}
 
       {/* Bottom Nav */}

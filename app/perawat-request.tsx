@@ -2,27 +2,36 @@ import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 import { useState } from "react";
 import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Alert,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
 
 const shiftInfo: Record<string, string> = {
-  Pagi: "07.00 - 14.00",
-  Siang: "14.00 - 21.00",
-  Malam: "21.00 - 07.00",
+  AP: "07.00 - 14.00",
+  S1: "07.00 - 14.00",
+  S: "14.00 - 21.00",
+  B: "21.00 - 07.00",
+};
+
+const shiftPoli: Record<string, string> = {
+  AP: "Poli Pagi/OK",
+  S1: "Poli, Anamnesa, Nurse Station, Konditional",
+  S: "Poli Siang",
+  B: "Poli, Anamnesa, Nurse Station, Konditional",
 };
 
 const shiftColor: Record<string, string> = {
-  Pagi: "#ef4444",
-  Siang: "#EAB308",
-  Malam: "#6366f1",
+  AP: "#ef4444",
+  S1: "#EAB308",
+  S: "#0d9488",
+  B: "#6366f1",
 };
 
 export default function PerawatRequest() {
@@ -53,7 +62,14 @@ export default function PerawatRequest() {
       return;
     }
 
-    setSelectedDays([...selectedDays, { tanggal, shift }]);
+    setSelectedDays([
+      ...selectedDays,
+      {
+        tanggal,
+        shift,
+        poli: shiftPoli[shift],
+      },
+    ]);
     setShowShiftPicker(false);
     setSelectedShift("");
     setTempDate(null);
@@ -70,13 +86,19 @@ export default function PerawatRequest() {
     }
 
     for (const day of selectedDays) {
-      await supabase.from("request_jadwal").insert({
+      const { error } = await supabase.from("request_jadwal").insert({
         nama_perawat: namaLogin,
         tanggal: day.tanggal,
         shift: day.shift,
+        poli: day.poli,
         status: "Menunggu",
         status_admin: "Menunggu persetujuan",
       });
+
+      if (error) {
+        Alert.alert("Gagal menyimpan!", error.message);
+        return;
+      }
     }
 
     Alert.alert("Request jadwal berhasil dikirim!");
@@ -130,21 +152,25 @@ export default function PerawatRequest() {
           <Text style={styles.pickerTxt}>Pilih Shift</Text>
         </TouchableOpacity>
       </View>
-
       {/* Popup Pilih Shift */}
       {showShiftPicker && (
         <View style={styles.shiftOverlay}>
           <View style={styles.shiftCard}>
             <Text style={styles.shiftTitle}>Pilih Shift</Text>
-            {["Pagi", "Siang", "Malam"].map((shift) => (
+            {["AP", "S1", "S", "B"].map((shift) => (
               <TouchableOpacity
                 key={shift}
                 style={styles.shiftItem}
                 onPress={() => handlePilihShift(shift)}
               >
-                <Text style={[styles.shiftName, { color: shiftColor[shift] }]}>
-                  {shift}
-                </Text>
+                <View>
+                  <Text
+                    style={[styles.shiftName, { color: shiftColor[shift] }]}
+                  >
+                    {shift}
+                  </Text>
+                  <Text style={styles.shiftPoli}>{shiftPoli[shift]}</Text>
+                </View>
                 <Text style={styles.shiftJam}>{shiftInfo[shift]}</Text>
               </TouchableOpacity>
             ))}
@@ -299,4 +325,6 @@ const styles = StyleSheet.create({
   empty: { alignItems: "center", paddingTop: 60 },
   emptyTxt: { color: "#999", fontSize: 14, marginTop: 12 },
   emptySubTxt: { color: "#ccc", fontSize: 12, marginTop: 4 },
+
+  shiftPoli: { fontSize: 11, color: "#999", marginTop: 2 },
 });
