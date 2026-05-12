@@ -40,7 +40,7 @@ export default function LoginScreen() {
     if (data.role === "Perawat") {
       router.replace("/perawat-dashboard");
     } else if (data.role === "Admin") {
-      router.replace("/admin-dashboard");
+      router.replace("/admin-jadwal");
     } else if (data.role === "Kepegawaian") {
       router.replace("/kepegawaian-dashboard");
     } else if (data.role === "Direktur") {
