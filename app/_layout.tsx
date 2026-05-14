@@ -23,6 +23,9 @@ export default function RootLayout() {
         <Stack.Screen name="perawat-dashboard" options={{ headerShown: false }} />
         <Stack.Screen name="admin-jadwal" options={{ headerShown: false }} />
         <Stack.Screen name="admin-pengajuan" options={{ headerShown: false }} />
+        <Stack.Screen name="admin-edit-jadwal" options={{ headerShown: false }} />
+        <Stack.Screen name="admin-tambah-jadwal" options={{ headerShown: false }} />
+        <Stack.Screen name="admin-edit-form" options={{ headerShown: false }} />
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

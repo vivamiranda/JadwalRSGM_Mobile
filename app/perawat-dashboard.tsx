@@ -16,9 +16,16 @@ import { supabase } from "../supabase";
 import PopupPengajuan from "./popup-pengajuan";
 
 const shiftInfo: Record<string, string> = {
-  Pagi: "07.00 - 14.00",
-  Siang: "14.00 - 21.00",
-  Malam: "21.00 - 07.00",
+  AP:         "07.00 - 14.00",
+  S:          "14.00 - 21.00",
+  S1:         "12.00 - 21.00",
+  B:          "09.00 - 16.00",
+  DP:         "08.00 - 16.00",
+  CP:         "08.00 - 16.00",
+  SABTU:      "08.00 - 16.00",
+  IBS:        "08.00 - 16.00",
+  "LIBUR/CUTI": "",
+  LIBURNAS:   "",
 };
 
 export default function PerawatDashboard() {
@@ -36,29 +43,34 @@ export default function PerawatDashboard() {
   }, [selectedDate, modeKalender]);
 
   const fetchJadwal = async () => {
-    const dari = selectedDate.toISOString().split("T")[0];
-    let sampai = dari;
+  // FIX: pakai local date bukan UTC
+  const d = selectedDate;
+  const dari = `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+  let sampai = dari;
 
-    if (modeKalender === "minggu") {
-      const akhir = new Date(selectedDate);
-      akhir.setDate(selectedDate.getDate() + 6);
-      sampai = akhir.toISOString().split("T")[0];
-    }
+  if (modeKalender === "minggu") {
+    const akhir = new Date(d);
+    akhir.setDate(d.getDate() + 6);
+    sampai = `${akhir.getFullYear()}-${String(akhir.getMonth()+1).padStart(2,'0')}-${String(akhir.getDate()).padStart(2,'0')}`;
+  }
 
-    const { data, error } = await supabase
-      .from("jadwal")
-      .select("*")
-      .gte("tanggal", dari)
-      .lte("tanggal", sampai)
-      .order("tanggal", { ascending: true });
+  const { data, error } = await supabase
+    .from("jadwal")
+    .select("*")
+    .gte("tanggal", dari)
+    .lte("tanggal", sampai)
+    .order("tanggal", { ascending: true });
 
-    if (!error && data) setJadwal(data);
-  };
+  if (!error && data) setJadwal(data);
+};
 
-  const handleConfirmDate = (date: Date) => {
-    setSelectedDate(date);
-    setDatePickerVisible(false);
-  };
+ const handleConfirmDate = (date: Date) => {
+  // FIX timezone: tambah offset lokal biar tidak geser
+  const offset = date.getTimezoneOffset() * 60000;
+  const localDate = new Date(date.getTime() - offset);
+  setSelectedDate(localDate);
+  setDatePickerVisible(false);
+};
 
   const filtered = jadwal.filter((j) =>
     j.nama_perawat.toLowerCase().includes(search.toLowerCase()),
