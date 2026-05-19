@@ -3,15 +3,15 @@ import * as ImagePicker from "expo-image-picker";
 import { router } from "expo-router";
 import { useEffect, useState } from "react";
 import {
-    Alert,
-    Image,
-    Modal,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
+  Alert,
+  Image,
+  Modal,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { supabase } from "../supabase";
@@ -115,19 +115,19 @@ export default function PerawatProfil() {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* Header */}
-      <View style={styles.header}>
-        <TouchableOpacity onPress={() => router.back()}>
-          <Ionicons name="chevron-back" size={24} color="#fff" />
-        </TouchableOpacity>
-        <View style={{ flex: 1, alignItems: "center" }}>
-          <Text style={styles.headerTitle}>Profile</Text>
+      {/* Header + Foto Card dibungkus */}
+      <View style={styles.headerWrapper}>
+        <View style={styles.header}>
+          <TouchableOpacity onPress={() => router.back()}>
+            <Ionicons name="chevron-back" size={24} color="#fff" />
+          </TouchableOpacity>
+          <View style={{ flex: 1, alignItems: "center" }}>
+            <Text style={styles.headerTitle}>Profile</Text>
+          </View>
+          <View style={{ width: 24 }} />
         </View>
-        <View style={{ width: 24 }} />
-      </View>
 
-      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
-        {/* Foto Profil - Card Putih */}
+        {/* Foto Card overlap ke header */}
         <View style={styles.fotoCard}>
           {profil?.foto_profil ? (
             <Image source={{ uri: profil.foto_profil }} style={styles.foto} />
@@ -143,7 +143,9 @@ export default function PerawatProfil() {
             <Text style={styles.editFotoTxt}>edit</Text>
           </TouchableOpacity>
         </View>
+      </View>
 
+      <ScrollView contentContainerStyle={{ paddingBottom: 120 }}>
         {/* Menu - Tiap item card terpisah */}
         <View style={styles.menuContainer}>
           {/* Nama */}
@@ -305,61 +307,43 @@ const styles = StyleSheet.create({
   },
 
   // HEADER
- header: {
-  backgroundColor: "#0d9488",
-
-  flexDirection: "row",
-  alignItems: "flex-start",
-  justifyContent: "space-between",
-
-  paddingHorizontal: 24,
-  paddingTop: 18,
-
-  height: 230,
-
-  borderBottomLeftRadius: 90,
-  borderBottomRightRadius: 90,
-
-  zIndex: 1,
-},
+  header: {
+    backgroundColor: "#0d9488",
+    flexDirection: "row",
+    alignItems: "flex-start",
+    justifyContent: "space-between",
+    paddingHorizontal: 24,
+    paddingTop: 18,
+    height: 180, // ← lebih pendek
+    borderBottomLeftRadius: 70,
+    borderBottomRightRadius: 70,
+    zIndex: 1,
+  },
 
   headerTitle: {
     color: "#fff",
-    fontSize: 24,
+    fontSize: 20,
     fontWeight: "700",
-    marginTop: 2,
+    marginTop: 1,
   },
 
   // FOTO PROFILE CARD
-fotoCard: {
-  backgroundColor: "#fff",
-
-  marginHorizontal: 32,
-
-  borderRadius: 24,
-
-  paddingVertical: 28,
-
-  alignItems: "center",
-
-  marginTop: -35,
-
-  position: "relative",
-
-  zIndex: 999,
-
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: 4,
+  fotoCard: {
+    backgroundColor: "#fff",
+    marginHorizontal: 32,
+    borderRadius: 24,
+    paddingVertical: 28,
+    alignItems: "center",
+    marginTop: -80, // ← narik card ke atas, overlap header
+    position: "relative",
+    zIndex: 999,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.1,
+    shadowRadius: 8,
+    elevation: 5,
+    marginBottom: 22,
   },
-  shadowOpacity: 0.1,
-  shadowRadius: 8,
-
-  elevation: 5,
-
-  marginBottom: 22,
-},
 
   foto: {
     width: 95,
@@ -539,33 +523,33 @@ fotoCard: {
   },
 
   // BOTTOM NAVBAR
- bottomNav: {
-  flexDirection: "row",
+  bottomNav: {
+    flexDirection: "row",
 
-  backgroundColor: "#fff",
+    backgroundColor: "#fff",
 
-  position: "absolute",
+    position: "absolute",
 
-  bottom: 0,
-  left: 0,
-  right: 0,
+    bottom: 0,
+    left: 0,
+    right: 0,
 
-  paddingTop: 12,
-  paddingBottom: 28,
+    paddingTop: 12,
+    paddingBottom: 28,
 
-  borderTopLeftRadius: 26,
-  borderTopRightRadius: 26,
+    borderTopLeftRadius: 26,
+    borderTopRightRadius: 26,
 
-  shadowColor: "#000",
-  shadowOffset: {
-    width: 0,
-    height: -2,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: -2,
+    },
+    shadowOpacity: 0.05,
+    shadowRadius: 5,
+
+    elevation: 10,
   },
-  shadowOpacity: 0.05,
-  shadowRadius: 5,
-
-  elevation: 10,
-},
   navItem: {
     flex: 1,
     alignItems: "center",

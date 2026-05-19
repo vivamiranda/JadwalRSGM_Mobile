@@ -228,9 +228,10 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 20,
+    marginBottom: 14,
+    paddingVertical: 4,
   },
-  title: { fontSize: 18, fontWeight: "bold", color: "#1a1a1a" },
+  title: { fontSize: 20, fontWeight: "bold", color: "#1a1a1a" },
   infoBox: {
     flexDirection: "row",
     alignItems: "center",
