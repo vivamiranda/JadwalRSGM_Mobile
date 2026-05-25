@@ -26,6 +26,15 @@ export default function RootLayout() {
         <Stack.Screen name="admin-edit-jadwal" options={{ headerShown: false }} />
         <Stack.Screen name="admin-tambah-jadwal" options={{ headerShown: false }} />
         <Stack.Screen name="admin-edit-form" options={{ headerShown: false }} />
+        <Stack.Screen name="kepegawaian-surat-izin" options={{ headerShown: false }} />
+        <Stack.Screen name="kepegawaian-dashboard" options={{ headerShown: false }} />
+        <Stack.Screen name="kepegawaian-tambah-perawat" options={{ headerShown: false }} />
+        <Stack.Screen name="kepegawaian-detail-perawat" options={{ headerShown: false }} />
+        <Stack.Screen name="kepegawaian-edit-perawat" options={{ headerShown: false }} />
+        <Stack.Screen name="kepegawaian-jadwal" options={{ headerShown: false }} />
+        <Stack.Screen name="kepegawaian-pengajuan" options={{ headerShown: false }} />
+        <Stack.Screen name="kepegawaian-rekap" options={{ headerShown: false }} />
+
       </Stack>
       <StatusBar style="auto" />
     </ThemeProvider>

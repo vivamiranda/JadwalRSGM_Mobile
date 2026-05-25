@@ -109,7 +109,7 @@ export default function LoginScreen() {
 
         {/* Tombol Masuk */}
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Masuk</Text>
+          <Text style={styles.buttonText}>Masuk</Text>                                                                                                  
         </TouchableOpacity>
       </View>
     </SafeAreaView>

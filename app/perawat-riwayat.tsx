@@ -258,12 +258,13 @@ export default function PerawatRiwayat() {
               </View>
 
               {/* Tombol Cetak jika disetujui */}
-              {item.status === "Disetujui" && (
-                <TouchableOpacity style={styles.cetakBtn}>
-                  <Ionicons name="print-outline" size={16} color="#0d9488" />
-                  <Text style={styles.cetakTxt}>Cetak surat izin</Text>
-                </TouchableOpacity>
-              )}
+            {item.status_admin === "Disetujui" && item.status_direktur === "Disetujui" && (
+              <TouchableOpacity style={styles.cetakBtn}
+                onPress={() => router.push(`/kepegawaian-surat-izin?id=${item.id}` as any)}>
+                <Ionicons name="print-outline" size={16} color="#0d9488" />
+                <Text style={styles.cetakTxt}>Cetak surat izin</Text>
+              </TouchableOpacity>
+            )}
             </View>
           )}
           ListEmptyComponent={
